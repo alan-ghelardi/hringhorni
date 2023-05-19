@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+commonLabels:
+  app.kubernetes.io/name: hringhorni
+  app.kubernetes.io/part-of: hringhorni
+resources:
+- config-maps
+- crd
+- kayenta
+- minio
+- namespace
+- redis
+- rollout-controller
+- rollout-webhook
+
+patches:
+  - target:
+      group: apps
+      kind: Deployment
+      namespace: h8i-system
+      name: kayenta
+    path: patches/aws.yaml

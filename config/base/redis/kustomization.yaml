@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: h8i-system
+helmCharts:
+- name: redis
+  repo: https://charts.bitnami.com/bitnami
+  releaseName: kayenta-redis
+  valuesInline:
+    architecture: standalone
+    auth:
+      enabled: false
+      sentinel: false
+    cluster:
+      enabled: false
+    master:
+      persistence:
+        enabled: false
+    sentinel:
+      enabled: false

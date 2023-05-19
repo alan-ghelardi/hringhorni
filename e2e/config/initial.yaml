@@ -1,0 +1,33 @@
+apiVersion: hringhorni.nu.dev/v1alpha1
+kind: Rollout
+metadata:
+  name: greeting-api-abc
+spec:
+  appName: greeting-api
+  revision: 0ef2ad3bf24461518b2435a724bd57d36b178e3d
+  replicas: 4
+  timeout: 1m
+  selector:
+    matchLabels:
+      app: greeting-api
+  template:
+    metadata:
+      labels:
+        app: greeting-api
+    spec:
+      containers:
+      - name: greeting-api
+        image: ko://github.com/nubank/hringhorni/e2e/cmd/initial
+        ports:
+          - name: http
+            containerPort: 8080
+          - name: metrics
+            containerPort: 2112
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - all

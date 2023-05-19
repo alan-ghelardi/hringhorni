@@ -1,0 +1,11 @@
+resources:
+- deployment.yaml
+- service.yaml
+configMapGenerator:
+  # Create a ConfigMap containing Kayenta configs.
+  - name: kayenta
+    namespace: h8i-system
+    files:
+      - kayenta.yml
+    options:
+      disableNameSuffixHash: true

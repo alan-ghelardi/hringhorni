@@ -1,0 +1,60 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: defaulting.webhook.h8i-system.hringhorni.nu.dev
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    service:
+      name: rollout-webhook
+      namespace: h8i-system
+  failurePolicy: Fail
+  timeoutSeconds: 30
+  sideEffects: None
+  name: defaulting.webhook.h8i-system.hringhorni.nu.dev
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: validation.webhook.h8i-system.hringhorni.nu.dev
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    service:
+      name: rollout-webhook
+      namespace: h8i-system
+  failurePolicy: Fail
+  sideEffects: None
+  timeoutSeconds: 30
+  name: validation.webhook.h8i-system.hringhorni.nu.dev
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingWebhookConfiguration
+metadata:
+  name: config.webhook.h8i-system.hringhorni.nu.dev
+webhooks:
+- admissionReviewVersions:
+  - v1beta1
+  - v1
+  clientConfig:
+    service:
+      name: rollout-webhook
+      namespace: h8i-system
+  failurePolicy: Fail
+  sideEffects: None
+  timeoutSeconds: 30
+  name: config.webhook.h8i-system.hringhorni.nu.dev
+  objectSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: hringhorni
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: webhook-certs
+  namespace: h8i-system
+# The data is populated at install time.

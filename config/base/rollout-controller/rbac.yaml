@@ -1,0 +1,39 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: hringhorni-rollout-controller
+rules:
+  - apiGroups: [""]
+    resources: [configmaps, services, secrets, events]
+    verbs: [create, get, list, patch, update, watch]
+  - apiGroups: [apps]
+    resources: [deployments]
+    verbs: [create, delete, get, list, patch, update, watch]
+  - apiGroups: [apps]
+    resources: [replicasets]
+    verbs: [get, list, watch]
+  - apiGroups: [""]
+    resources: [pods]
+    verbs: [get, list, watch]
+  - apiGroups: [admissionregistration.k8s.io]
+    resources: [mutatingwebhookconfigurations, validatingwebhookconfigurations]
+    verbs: [get, list, create, update, delete, patch, watch]
+  - apiGroups: [coordination.k8s.io]
+    resources: [leases]
+    verbs: [get, list, create, update, delete, patch, watch]
+  - apiGroups: [hringhorni.nu.dev]
+    resources: ["*"]
+    verbs: [create, get, list, patch, update, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: hringhorni-rollout-controller
+subjects:
+  - kind: ServiceAccount
+    name: rollout-controller
+    namespace: h8i-system
+roleRef:
+  kind: ClusterRole
+  name: hringhorni-rollout-controller
+  apiGroup: rbac.authorization.k8s.io

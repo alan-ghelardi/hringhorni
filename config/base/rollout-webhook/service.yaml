@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rollout-webhook
+  name: rollout-webhook
+  namespace: h8i-system
+spec:
+  ports:
+    - port: 443
+      targetPort: 8443
+  selector:
+    role: webhook

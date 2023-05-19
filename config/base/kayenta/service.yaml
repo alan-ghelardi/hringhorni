@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kayenta
+  namespace: h8i-system
+  labels:
+    app: kayenta
+spec:
+  selector:
+    app: kayenta
+  type: NodePort
+  ports:
+    - name: http
+      port: 8090
+      nodePort: 30001

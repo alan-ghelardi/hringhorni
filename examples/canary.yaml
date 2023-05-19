@@ -1,0 +1,38 @@
+apiVersion: hringhorni.nu.dev/v1alpha1
+kind: Rollout
+metadata:
+  generateName: sample-app-
+spec:
+  appName: sample-app
+  revision: e2079325dff82a0274b7d774b0dd09ae8d676d18
+  externalLink: https://github.com/nubank/sample-app/pull/3
+  replicas: 4
+  timeout: 10m
+  canary:
+    percentage: 10.0
+    duration: 2h
+    interval: 30m
+  selector:
+    matchLabels:
+      app: sample-app
+  template:
+    metadata:
+      labels:
+        app: sample-app
+    spec:
+      containers:
+      - name: sample-app
+        image: nubank/sample-app:v3
+        ports:
+          - name: http
+            containerPort: 8080
+          - name: metrics
+            containerPort: 2112
+
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - all

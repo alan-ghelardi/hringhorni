@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config-logging
+  namespace: h8i-system
+  labels:
+    hringhorni.hringhorni.dev/release: devel
+data:
+    zap-logger-config: |
+      {
+      "level": "debug",
+        "development": false,
+        "outputPaths": ["stdout"],
+        "errorOutputPaths": ["stderr"],
+        "encoding": "json",
+        "encoderConfig": {
+          "timeKey": "time",
+          "levelKey": "level",
+          "nameKey": "logger",
+          "callerKey": "caller",
+          "messageKey": "msg",
+          "stacktraceKey": "stacktrace",
+          "lineEnding": "",
+          "levelEncoder": "",
+          "timeEncoder": "iso8601",
+          "durationEncoder": "string",
+          "callerEncoder": ""
+        }
+      }
+
+    # Log level overrides
+    # Changes are be picked up immediately.
+    loglevel.asyncscheduler: "info"
+    loglevel.cloudeventssink: "info"
+    loglevel.console: "info"
+    loglevel.consoleapi: "info"
+    loglevel.controller: "info"
+    loglevel.crontrigger: "info"
+    loglevel.shardedcontroller: "info"
+    loglevel.eventhandler: "info"
+    loglevel.logscollector: "info"
+    loglevel.hooklistener: "info"
+    loglevel.webhook: "info"

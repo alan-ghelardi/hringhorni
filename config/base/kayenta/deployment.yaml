@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kayenta
+  namespace: h8i-system
+  labels:
+    app: kayenta
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kayenta
+  template:
+    metadata:
+      labels:
+        app: kayenta
+    spec:
+      containers:
+        - name: kayenta
+          image: alangh/kayenta
+          env:
+            # If you need to troubleshoot, you can set the logging level by adding
+            # -Dlogging.level.root=TRACE
+            # Without the log at DEBUG level, very little logging comes out at all and
+            # it's really hard to see if something goes wrong. If you don't want that
+            # much logging, go ahead and remove the log level option here.
+            - name: JAVA_OPTS
+              value: "-XX:+UnlockExperimentalVMOptions -Dlogging.level.root=DEBUG"
+          ports:
+            - name: http
+              containerPort: 8090
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /opt/kayenta/config
+      volumes:
+        - name: config
+          configMap:
+            name: kayenta

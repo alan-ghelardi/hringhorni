@@ -1,0 +1,16 @@
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: AWS_ACCESS_KEY_ID
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: rootUser
+- op: add
+  path: /spec/template/spec/containers/0/env/-
+  value:
+    name: AWS_SECRET_ACCESS_KEY
+    valueFrom:
+      secretKeyRef:
+        name: aws-credentials
+        key: rootPassword

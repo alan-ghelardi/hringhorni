@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: h8i-system
+resources:
+- aws-credentials.yaml
+helmCharts:
+- name: minio
+  repo: https://charts.min.io/
+  releaseName: minio
+  valuesInline:
+    mode: standalone
+    existingSecret: aws-credentials
+    persistence:
+      enabled: false
+    replicas: 1
+    buckets:
+    - name: kayenta
+      policy: upload
+    resources:
+      requests:
+        memory: 250Mi
+        cpu: 0.2
+      limits:
+        memory: 250Mi
+        cpu: 0.2

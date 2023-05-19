@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rollout-controller
+  namespace: h8i-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rollout-controller
+  template:
+    metadata:
+      labels:
+        app: rollout-controller
+    spec:
+      serviceAccountName: rollout-controller
+      containers:
+      - name: controller
+        image: ko://github.com/nubank/hringhorni/cmd/controller
+        ports:
+        - name: metrics
+          containerPort: 9090
+        env:
+        - name: SYSTEM_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CONFIG_LOGGING_NAME
+          value: config-logging
+        - name: CONFIG_OBSERVABILITY_NAME
+          value: config-observability
+        - name: METRICS_DOMAIN
+          value: hringhorni.dev/hringhorni
