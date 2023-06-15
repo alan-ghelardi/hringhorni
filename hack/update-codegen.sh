@@ -22,10 +22,6 @@ source $(dirname $0)/../vendor/knative.dev/hack/codegen-library.sh
 export PATH="$GOBIN:$PATH"
 K8S_CODEGEN="./vendor/k8s.io/code-generator/cmd"
 
-function run_yq() {
-    run_go_tool github.com/mikefarah/yq/v4@v4.23.1 yq "$@"
-}
-
 echo "=== Update Codegen for ${MODULE_NAME}"
 
 group "Kubernetes Codegen"
@@ -54,16 +50,6 @@ ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
                       github.com/nubank/hringhorni/pkg/client github.com/nubank/hringhorni/pkg/apis \
                       "rollouts:v1alpha1" \
                       --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
-
-group "Update CRD Schema"
-
-go run $(dirname $0)/../cmd/schema/ dump Analysis \
-    | run_yq eval-all --header-preprocess=false --inplace 'select(fileIndex == 0).spec.versions[0].schema.openAPIV3Schema = select(fileIndex == 1) | select(fileIndex == 0)' \
-             $(dirname $0)/../config/base/crd/analyses.yaml -
-
-go run $(dirname $0)/../cmd/schema/ dump Rollout \
-    | run_yq eval-all --header-preprocess=false --inplace 'select(fileIndex == 0).spec.versions[0].schema.openAPIV3Schema = select(fileIndex == 1) | select(fileIndex == 0)' \
-             $(dirname $0)/../config/base/crd/rollouts.yaml -
 
 group "Update deps post-codegen"
 

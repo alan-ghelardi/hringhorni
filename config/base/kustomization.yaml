@@ -4,6 +4,7 @@ commonLabels:
   app.kubernetes.io/name: hringhorni
   app.kubernetes.io/part-of: hringhorni
 resources:
+- argo-rollouts
 - config-maps
 - crd
 - kayenta
