@@ -35,6 +35,13 @@ ${CODEGEN_PKG}/generate-groups.sh "deepcopy,client,informer,lister" \
               "rollouts:v1alpha1" \
               --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
 
+group "argoproj  codegen"
+
+${CODEGEN_PKG}/generate-groups.sh "client,informer,lister" \
+              github.com/nubank/hringhorni/pkg/argoclient github.com/argoproj/argo-rollouts/pkg/apis \
+              "rollouts:v1alpha1" \
+              --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
+
 # Generate deep copy functions for other packages.
 go run ${K8S_CODEGEN}/deepcopy-gen/main.go \
    -O zz_generated.deepcopy \
@@ -48,6 +55,14 @@ group "Knative Codegen"
 # Knative Injection
 ${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
                       github.com/nubank/hringhorni/pkg/client github.com/nubank/hringhorni/pkg/apis \
+                      "rollouts:v1alpha1" \
+                      --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
+
+group "argoproj injection Codegen"
+
+# Knative Injection
+${KNATIVE_CODEGEN_PKG}/hack/generate-knative.sh "injection" \
+                      github.com/nubank/hringhorni/pkg/argoclient github.com/argoproj/argo-rollouts/pkg/apis \
                       "rollouts:v1alpha1" \
                       --go-header-file ${REPO_ROOT_DIR}/hack/boilerplate/boilerplate.go.txt
 
